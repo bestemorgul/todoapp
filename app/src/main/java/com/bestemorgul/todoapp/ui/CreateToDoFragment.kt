@@ -61,12 +61,43 @@ class CreateToDoFragment : Fragment(), ButtonAddTodoClickListener,
         return binding.root
 
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.actionDelete.visibility = View.INVISIBLE
+
+        binding.todo = ToDoModel(title = "", todo = "", todo_date = 0)
+        binding.listener = this
+        binding.listenerDate= this
+        binding.listenerTime= this
+
+
+        val id = navigationArgs.id
+        if (id > 0) {
+
+            viewModel.selectTodo(id).observe(this.viewLifecycleOwner) { selectedTodo ->
+                todo= selectedTodo
+                bindTodo(todo)
+            }
+
+            binding.actionDelete.visibility = View.VISIBLE
+            binding.actionDelete.setOnClickListener {
+                deleteTodo(todo)
+            }
+
+
+        } else {
+
+            binding.actionDelete.visibility = View.INVISIBLE
+
+        }
+    }
 
 
     private fun updateTodo() {
         if (isValidEntry()) {
             viewModel.updateTodo(
-                id = id,
+                id = navigationArgs.id,
                 title = binding.titleText.text.toString(),
                 todo = binding.todoText.text.toString(),
                 todo_date = 0
@@ -82,6 +113,7 @@ class CreateToDoFragment : Fragment(), ButtonAddTodoClickListener,
         binding.apply{
             titleText.setText(todo.title, TextView.BufferType.SPANNABLE)
             todoText.setText(todo.todo, TextView.BufferType.SPANNABLE)
+
             actionCreate.setOnClickListener {
                 updateTodo()
             }
@@ -101,7 +133,8 @@ class CreateToDoFragment : Fragment(), ButtonAddTodoClickListener,
             viewModel.addToDo(
                 binding.titleText.text.toString(),
                 binding.todoText.text.toString(),
-                0
+                todo_date = 0
+
             )
             findNavController().navigate(
                 R.id.action_createToDoFragment_to_toDoListFragment
@@ -116,35 +149,7 @@ class CreateToDoFragment : Fragment(), ButtonAddTodoClickListener,
         )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        binding.todo = ToDoModel(title = "", todo = "", todo_date = 0)
-        binding.listener = this
-        binding.listenerDate= this
-        binding.listenerTime= this
-
-        binding.actionDelete.visibility = View.INVISIBLE
-
-        val id = navigationArgs.id
-        if (id > 0) {
-
-            binding.actionDelete.visibility = View.VISIBLE
-            binding.actionDelete.setOnClickListener {
-                deleteTodo(todo)
-            }
-            viewModel.selectTodo(id).observe(this.viewLifecycleOwner) { selectedTodo ->
-                todo= selectedTodo
-                bindTodo(todo)
-            }
-
-
-        } else {
-
-            binding.actionDelete.visibility = View.INVISIBLE
-
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -163,8 +168,6 @@ class CreateToDoFragment : Fragment(), ButtonAddTodoClickListener,
         val diff = (c.timeInMillis/1000L)-(today.timeInMillis/1000L)
 
         binding.todo!!.todo_date = (c.timeInMillis/1000L).toInt()
-
-
 
         binding.actionCreate.setOnClickListener {
             addTodo()
