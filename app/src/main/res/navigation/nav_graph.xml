@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    android:label="@string/todo_list"
+    app:startDestination="@id/toDoListFragment">
+
+    <fragment
+        android:id="@+id/toDoListFragment"
+        android:name="com.bestemorgul.todoapp.ui.ToDoListFragment"
+        android:label="@string/todo_list"
+        tools:layout="@layout/fragment_to_do_list">
+        <action
+            android:id="@+id/action_to_create_todo"
+            app:destination="@id/createToDoFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_tododetail"
+            app:destination="@id/toDoDetailFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/createToDoFragment"
+        android:name="com.bestemorgul.todoapp.ui.CreateToDoFragment"
+        android:label="@string/create_label"
+        tools:layout="@layout/fragment_create_to_do">
+
+        <action
+            android:id="@+id/action_createToDoFragment_to_toDoListFragment"
+            app:destination="@id/toDoListFragment" />
+        <argument
+            android:name="id"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/toDoDetailFragment"
+        android:name="com.bestemorgul.todoapp.ui.ToDoDetailFragment"
+        android:label="DETAIL"
+        tools:layout="@layout/fragment_to_do_detail">
+
+        <action
+            android:id="@+id/action_toDoDetailFragment_to_createToDoFragment"
+            app:destination="@id/createToDoFragment" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>
