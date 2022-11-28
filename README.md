@@ -8,7 +8,7 @@ This app organizes your todo list and sets scheduled notifications based on sele
 
 
 ## Features
-WorkManager, MVVM, RecyclerView, Navigation, ViewModel, LiveData, DataBinding, ViewBinding, Room, Coroutines, Flow
+WorkManager, Notification, MVVM, RecyclerView, Navigation, ViewModel, LiveData, DataBinding, ViewBinding, Room, Coroutines, Flow
 
 
 
